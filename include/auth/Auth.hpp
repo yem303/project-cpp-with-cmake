@@ -1,19 +1,30 @@
-#ifndef AUTH_HPP
-#define AUTH_HPP
-
+#include <iostream>
 #include <vector>
 #include <string>
 #include "User.hpp"
 
 using namespace std;
 
-// login
-bool login(const vector<User*>& users,
-           const string& username,
-           const string& password,
-           User*& loggedInUser);
+class AuthService {
+private:
+    string username;
+    string password;
+    string role;
 
-// register
-void registerUser(vector<User*>& users);
+public:
+    AuthService(string username, string password, string role) {
+        this->username = username;
+        this->password = password;
+        this->role = role;
+    }
 
-#endif
+    // ✅ setters with parameters
+    void setUsername(string username){ this->username = username; }
+    void setPassword(string password){ this->password = password; }
+    void setRole(string role){ this->role = role; }
+
+    // ✅ getters with const
+    string getUsername() const { return username; }
+    string getPassword() const { return password; }
+    string getRole() const { return role; }
+};

@@ -1,11 +1,10 @@
 #include <iostream>
 #include "auth/Staff.hpp"
 
-using namespace std;
-
-Staff::Staff(string u, string p) : User(u, p) {}
+Staff::Staff(const std::string& u, const std::string& p)
+    : User(u, p) {}
 
 void Staff::showMenu() {
-    cout << "===== STAFF MENU =====" << endl;
-    cout << "1. View Products\n";
+    std::cout << "===== STAFF MENU =====" << std::endl;
+    std::cout << "1. View Products\n";
 }

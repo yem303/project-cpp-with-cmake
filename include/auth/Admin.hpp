@@ -2,10 +2,11 @@
 #define ADMIN_HPP
 
 #include "User.hpp"
+#include <string>
 
 class Admin : public User {
 public:
-    Admin(string u, string p);
+    Admin(const std::string& u, const std::string& p);
     void showMenu() override;
 };
 

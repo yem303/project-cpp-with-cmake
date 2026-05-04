@@ -2,22 +2,23 @@
 #define USER_HPP
 
 #include <string>
-using namespace std;
 
 class User {
 protected:
-    string username;
-    string password;
+    std::string username;
+    std::string password;
 
 public:
-    User(string u, string p);
+    User(std::string u, std::string p);
 
-    string getUsername() const;
-    string getPassword() const;
+    std::string getUsername() const;
+    std::string getPassword() const;
 
-    virtual void showMenu() = 0; // pure virtual
+    virtual std::string getRole() const = 0; // ✅ ADD THIS (important for your system)
 
-    virtual ~User(); // important for polymorphism
+    virtual void showMenu() = 0;
+
+    virtual ~User();
 };
 
 #endif
