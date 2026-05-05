@@ -1,13 +1,16 @@
 #ifndef ADMIN_HPP
 #define ADMIN_HPP
 
-#include "User.hpp"
-#include <string>
+#include "../products/ProductManager.hpp"
 
-class Admin : public User {
+class Admin {
+private:
+    ProductManager& manager;
+
 public:
-    Admin(const std::string& u, const std::string& p);
-    void showMenu() override;
+    Admin(ProductManager& m);
+
+    void menu(); // full control menu
 };
 
 #endif

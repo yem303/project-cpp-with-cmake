@@ -1,17 +1,11 @@
 #include "auth/User.hpp"
 
-// Constructor (better style: initializer list)
-User::User(std::string u, std::string p)
-    : username(u), password(p) {}
+User::User() : username(""), password(""), cpass(""), role("") {}
 
-// Getters
-std::string User::getUsername() const {
-    return username;
-}
+User::User(const std::string& u, const std::string& p, const std::string& cp, const std::string& r)
+    : username(u), password(p), cpass(cp), role(r) {}
 
-std::string User::getPassword() const {
-    return password;
-}
-
-// Destructor
-User::~User() {}
+std::string User::getUsername() const { return username; }
+std::string User::getPassword() const { return password; }
+std::string User::getCpass() const { return cpass; }
+std::string User::getRole() const { return role; }
