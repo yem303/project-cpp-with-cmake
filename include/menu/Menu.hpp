@@ -1,14 +1,18 @@
-#ifndef MENU_HPP
-#define MENU_HPP
+#pragma once
 
-#include "../auth/User.hpp"
-#include "../products/ProductManager.hpp"
+#include <string>
+#include <vector>
+#include "auth/User.hpp"
+#include "products/ProductManager.hpp"
 
 class Menu {
 public:
+    void loadingText();
+    void showMainMenu();
     void authMenu();
     void adminMenu(ProductManager& manager);
     void userMenu(ProductManager& manager, const User& user);
-};
 
-#endif
+private:
+    void printMenu(const std::vector<std::string>& items, const std::string& title);
+};

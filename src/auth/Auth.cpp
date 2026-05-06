@@ -68,58 +68,49 @@ void Auth::saveUser(const User& user) {
 void Auth::registerUser() {
     string username, password, cpass, role;
 
-    cout << "Enter username: ";
-    cin >> username;
-
-    cout << "Enter password: ";
-    cin >> password;
-
-    cout << "Enter confirm password: ";
-    cin >> cpass;
+    cout << "\033[33m★ Enter Username:          \033[0m"; cin >> username;
+    cout << "\033[33m★ Enter Password:          \033[0m"; cin >> password;
+    cout << "\033[33m★ Confirm Password:        \033[0m"; cin >> cpass;
 
     if (password != cpass) {
-        cout << "❌ Passwords do not match!\n";
+        cout << "\033[31m❌ Passwords do not match!\n\033[0m";
         return;
     }
 
-    cout << "Enter role (admin/user): ";
-    cin >> role;
+    cout << "\033[33m★ Enter Role (admin/user): \033[0m"; cin >> role;
+
+    if (role != "admin" && role != "user") {
+        cout << "\033[31m❌ Invalid role! Must be 'admin' or 'user'.\n\033[0m";
+        return;
+    }
 
     vector<User> users = loadUsers();
-
-    for (auto &u : users) {
+    for (auto& u : users) {
         if (u.getUsername() == username) {
-            cout << "❌ Username already exists!\n";
+            cout << "\033[31m❌ Username already exists!\n\033[0m";
             return;
         }
     }
 
     saveUser(User(username, password, cpass, role));
-    cout << "✅ Registered successfully!\n";
+    cout << "\033[32m✅ Registered successfully!\n\033[0m";
 }
 
 // ================= LOGIN =================
-bool Auth::login(User &currentUser) {
+bool Auth::login(User& currentUser) {
     string username, password;
 
-    cout << "Enter username: ";
-    cin >> username;
-
-    cout << "Enter password: ";
-    cin >> password;
+    cout << "\033[33m★ Enter Username: \033[0m"; cin >> username;
+    cout << "\033[33m★ Enter Password: \033[0m"; cin >> password;
 
     vector<User> users = loadUsers();
-
-    for (auto &u : users) {
-        if (u.getUsername() == username &&
-            u.getPassword() == password) {
-
+    for (auto& u : users) {
+        if (u.getUsername() == username && u.getPassword() == password) {
             currentUser = u;
-            cout << "✅ Login successful!\n";
-            return true;
+            return true;  // success message handled by showLoginSuccess() in Menu
         }
     }
 
-    cout << "❌ Invalid login!\n";
+    cout << "\033[31m❌ Invalid username or password!\n\033[0m";
     return false;
 }
