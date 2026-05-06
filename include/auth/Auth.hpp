@@ -17,6 +17,7 @@ public:
 
     void registerUser();
     bool login(User &currentUser);
+    
 };
 
 #endif

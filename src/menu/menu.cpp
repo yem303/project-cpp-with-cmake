@@ -58,7 +58,7 @@ static void showLoginSuccess() {
     cout << GREEN << "\n    Authenticating...\n";
     cout << "    Loading: [";
     for (int i = 0; i <= 30; i++) {
-        cout << "=";
+        cout << GREEN << "█";
         cout.flush();
         this_thread::sleep_for(chrono::milliseconds(40));
     }
@@ -78,12 +78,12 @@ void Menu::loadingText() {
     cout << CYAN << "    Loading...\n\n";
 
     // Combined ASCII to ensure alignment
-    cout << BLUE << R"(        ██╗███████╗████████╗ █████╗ ██████╗ )" << RED << " ██╗   " << YELLOW << R"( ██████╗ ██████╗ )" << "\n";
-    cout << BLUE << R"(        ██║██╔════╝╚══██╔══╝██╔══██╗██╔══██╗)" << RED << " ██║   " << YELLOW << R"(██╔════╝ ╚════██╗)" << "\n";
+    cout << BLUE << R"(        ██╗███████╗████████╗ █████╗ ██████╗ )" << RED << "       " << YELLOW << R"( ██████╗ ██████╗ )" << "\n";
+    cout << BLUE << R"(        ██║██╔════╝╚══██╔══╝██╔══██╗██╔══██╗)" << RED << "       " << YELLOW << R"(██╔════╝ ╚════██╗)" << "\n";
     cout << BLUE << R"(        ██║███████╗   ██║   ███████║██║  ██║)" << RED << "██████╗" << YELLOW << R"(██║  ███╗ █████╔╝)" << "\n";
     cout << BLUE << R"(        ██║╚════██║   ██║   ██╔══██║██║  ██║)" << RED << "╚═════╝" << YELLOW << R"(██║   ██║██╔═══╝ )" << "\n";
-    cout << BLUE << R"(        ██║███████║   ██║   ██║  ██║██████╔╝)" << RED << " ██║   " << YELLOW << R"(╚██████╔╝███████╗)" << "\n";
-    cout << BLUE << R"(        ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═════╝ )" << RED << " ╚═╝   " << YELLOW << R"( ╚═════╝ ╚══════╝)" << "\n";
+    cout << BLUE << R"(        ██║███████║   ██║   ██║  ██║██████╔╝)" << RED << "       " << YELLOW << R"(╚██████╔╝███████╗)" << "\n";
+    cout << BLUE << R"(        ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═════╝ )" << RED << "      " << YELLOW << R"( ╚═════╝ ╚══════╝)" << "\n";
 
     cout << RESET << "\n\n";
 
@@ -109,7 +109,7 @@ void Menu::loadingText() {
 void Menu::showMainMenu() {
     cout << CYAN << BOLD;
     cout << "\n        ╔═══════════════════════════════════════════════════════════════╗\n";
-    cout << "        ║         INVENTORY MANAGEMENT SYSTEM 2026                      ║\n";
+    cout << "        ║         INVENTORY  MANAGEMENT SYSTEM 2026                     ║\n";
     cout << "        ╚═══════════════════════════════════════════════════════════════╝\n";
     cout << RESET;
 
@@ -165,10 +165,69 @@ void Menu::authMenu() {
         if (choice == 1 || choice == 2) {
             string roleHint = (choice == 1) ? "admin" : "user";
             showSecureLoginBanner(roleHint);
-            loggedIn = auth.login(currentUser);
-            if (loggedIn) {
-                showLoginSuccess();
-                break;
+            
+            // Show login/register submenu
+            cout << CYAN << "    ╔════════════════════════════════════════════════════╗\n";
+            cout << "    ║                LOGIN / REGISTER                    ║\n";
+            cout << "    ╠════════════════════════════════════════════════════╣\n";
+            cout << "    ║                                                    ║\n";
+            cout << "    ║  " << MAGENTA << "[1]  Login" << CYAN << "                                        ║\n";
+            cout << "    ║  " << MAGENTA << "[2]  Register New Account" << CYAN << "                         ║\n";
+            cout << "    ║  " << MAGENTA << "[3]  Back to Main Menu" << CYAN << "                            ║\n";
+            cout << "    ║                                                    ║\n";
+            cout << "    ╚════════════════════════════════════════════════════╝\n" << RESET;
+            
+            cout << MAGENTA << "\n    Enter your choice > " << RESET;
+            
+            int authChoice;
+            if (!(cin >> authChoice)) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << RED << "    ✗ Invalid input!\n" << RESET;
+                continue;
+            }
+            
+            if (authChoice == 1) {
+                // Login
+                loggedIn = auth.login(currentUser);
+                if (loggedIn) {
+                    // Check if user role matches selected portal
+                    if ((choice == 1 && currentUser.getRole() == "admin") ||
+                        (choice == 2 && currentUser.getRole() == "user")) {
+                        showLoginSuccess();
+                        break;
+                    } else {
+                        cout << RED << "\n    ✗ Access denied! Wrong portal for this account type.\n" << RESET;
+                        this_thread::sleep_for(chrono::milliseconds(1500));
+                    }
+                }
+            } 
+            else if (authChoice == 2) {
+                // Register
+                cout << CYAN << "\n    ╔════════════════════════════════════════════════════╗\n";
+                cout << "    ║              REGISTER NEW ACCOUNT                  ║\n";
+                cout << "    ╚════════════════════════════════════════════════════╝\n" << RESET;
+                
+                auth.registerUser(); // This will handle the registration UI
+                
+                cout << GREEN << "\n    ✓ Registration successful! Please login.\n" << RESET;
+                this_thread::sleep_for(chrono::milliseconds(1500));
+                
+                
+                loggedIn = auth.login(currentUser);
+                if (loggedIn) {
+                    if ((choice == 1 && currentUser.getRole() == "admin") ||
+                        (choice == 2 && currentUser.getRole() == "user")) {
+                        showLoginSuccess();
+                        break;
+                    }
+                }
+            }
+            else if (authChoice == 3) {
+                continue; // Back to main menu
+            }
+            else {
+                cout << RED << "    ✗ Invalid choice!\n" << RESET;
             }
         } else {
             cout << RED << "    ✗ Invalid choice!\n" << RESET;
@@ -221,7 +280,7 @@ void Menu::adminMenu(ProductManager& manager) {
 
         cout << GREEN;
         cout << "\n    ┌───────────────────────────────────────────────────────────────┐\n";
-        cout << "    │     Select an option to manage inventory (1-5)                │\n";
+        cout << "    │     Select an option to manage inventory (1-6)                │\n";
         cout << "    └───────────────────────────────────────────────────────────────┘\n";
         cout << RESET;
 
@@ -235,36 +294,45 @@ void Menu::adminMenu(ProductManager& manager) {
         }
 
         switch (option) {
-            case 1: 
+            case 1:{
                 cout << "\n";
                 manager.addProduct(); 
                 break;
-            case 2: 
+            }
+            case 2:{
                 cout << "\n";
                 manager.showProducts(); 
                 break;
-            case 3: 
+            }
+            case 3:{
                 cout << "\n";
                 manager.updateProduct(); 
                 break;
-            case 4: 
+            }
+            case 4: {
                 cout << "\n";
                 manager.deleteProduct(); 
                 break;
-            case 5: 
+            }
+            case 5:{
+                 cout << "\n";
+                 manager.sortProducts();
+                 break;
+            }
+            case 6: 
                 cout << GREEN << "\n    Returning to main menu...\n" << RESET; 
                 break;
             default: 
                 cout << RED << "    ✗ Invalid choice! Please select 1-5\n" << RESET;
         }
         
-        if (option != 5 && option >= 1 && option <= 4) {
+        if (option != 6 && option >= 1 && option <= 4) {
             cout << "\n    Press Enter to continue...";
             cin.ignore();
             cin.get();
         }
 
-    } while (option != 5);
+    } while (option != 6);
 }
 
 // ================= USER MENU =================
@@ -279,7 +347,7 @@ void Menu::userMenu(ProductManager& manager, const User& user) {
     do {
         cout << CYAN;
         cout << "\n    ╔═══════════════════════════════════════════════════════════════╗\n";
-        cout << "    ║                         USER PANEL                            ║\n";
+        cout << "    ║                           🛒 USER PANEL 🛒                     ║\n";
         cout << "    ╠═══════════════════════════════════════════════════════════════╣\n";
         cout << "    ║                                                               ║\n";
         cout << "    ║  " << MAGENTA << "[1]  🪟  Show Products" << CYAN << "                                        ║\n";
@@ -307,7 +375,6 @@ void Menu::userMenu(ProductManager& manager, const User& user) {
             cout << RED << "    ✗ Invalid input!\n" << RESET;
             continue;
         }
-
         switch (option) {
             case 1: 
                 cout << "\n";

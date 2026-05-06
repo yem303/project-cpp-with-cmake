@@ -19,6 +19,7 @@ public:
 
     void input();
     void output() const;
+    static void displayHeader();
 
     void setId(int id);
     void setName(const string& name);

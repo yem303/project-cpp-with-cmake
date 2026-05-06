@@ -12,7 +12,6 @@ private:
 public:
     void loadFromExcel(std::string file, vector<Product> products);
     void writeProductToexcel(std::string file, vector<Product> products);
-
     void addProduct();
     void showProducts();
     void searchProduct();

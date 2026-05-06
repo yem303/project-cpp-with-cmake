@@ -66,6 +66,7 @@ void ProductManager::writeProductToexcel(string filename, vector<Product> produc
 }
 // Add product stock manager
 void ProductManager::addProduct() {
+    
     Product newProduct;
     newProduct.input();
     productList.push_back(newProduct);
@@ -104,6 +105,7 @@ void ProductManager::searchProduct() {
         });
 
     if (it_if != productList.end()) {
+        Product::displayHeader();
         it_if->output();
         cout<<"Search has found"<<endl;
     } else {
@@ -148,13 +150,13 @@ void ProductManager::deleteProduct() {
         cout << "❌ Delete is not successfully!"<<endl;;
     }
 }
-// Sort Products
+// Sort products order
 void ProductManager::sortProducts() {
     sort(productList.begin(), productList.end(),
         [](Product &objA, Product &objB) {
             return objA.getId() < objB.getId();
         });
     showProducts();
-    writeProductToexcel("products.xlsx",productList);
+    writeProductToexcel("products.xlsx", productList);
     cout << "✅ Sorted successfully\n";
 }
