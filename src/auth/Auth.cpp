@@ -26,7 +26,7 @@ void Auth::initFile() {
     }
 }
 
-// ================= LOAD USERS =================
+// Load new user
 vector<User> Auth::loadUsers() {
     vector<User> users;
 
@@ -48,7 +48,7 @@ vector<User> Auth::loadUsers() {
     return users;
 }
 
-// ================= SAVE USER =================
+// save user to excel file
 void Auth::saveUser(const User& user) {   
     workbook wb;
     wb.load(userFile);
@@ -64,7 +64,7 @@ void Auth::saveUser(const User& user) {
     wb.save(userFile);
 }
 
-// ================= REGISTER =================
+// Register
 void Auth::registerUser() {
     string username, password, cpass, role;
 
@@ -84,6 +84,7 @@ void Auth::registerUser() {
         return;
     }
 
+    // use already has 
     vector<User> users = loadUsers();
     for (auto& u : users) {
         if (u.getUsername() == username) {
@@ -96,7 +97,7 @@ void Auth::registerUser() {
     cout << "\033[32m✅ Registered successfully!\n\033[0m";
 }
 
-// ================= LOGIN =================
+// Login account
 bool Auth::login(User& currentUser) {
     string username, password;
 

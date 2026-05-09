@@ -9,7 +9,6 @@ void Admin::menu() {
     int choice;
 
     do {
-        cout << "\n1.Add\n2.Show\n3.Search\n4.Update\n5.Delete\n6.Sort\n0.Exit\n";
         cin >> choice;
         switch(choice) {
             case 1: manager.addProduct(); break;

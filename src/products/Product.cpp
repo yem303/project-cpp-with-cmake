@@ -81,15 +81,10 @@ void Product::setQty(int qty){this->qty = qty;}
 
 // GETTERS 
 int Product::getId() const { return id; }
-
 string Product::getName() const { return name; }
-
 string Product::getCode() const { return code; }
-
 double Product::getPrice() const { return price; }
-
 int Product::getUnit() const { return unit; }
-
 int Product::getQty() const { return qty; }
 
 // Calcutation total stock 

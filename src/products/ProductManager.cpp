@@ -13,13 +13,13 @@ using namespace tabulate;
 // ================= LOAD new data =================
 void ProductManager::loadFromExcel(string filename, vector<Product> products) {
     productList.clear();
-    ifstream f(filename);
-    if (!f.good()) return;
+    // ifstream f(filename);
+    // if (!f.good()) return;
     workbook wb;
     wb.load(filename);
 
     auto ws = wb.active_sheet();
-    int rows = ws.highest_row();
+    int rows = ws.highest_row(); // Returns the row of the last non-empty cell in the worksheet.
 
     for (int i = 2; i <= rows; i++) {
         int id = ws.cell("A" + to_string(i)).value<int>();

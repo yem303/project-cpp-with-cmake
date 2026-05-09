@@ -12,14 +12,10 @@ int main() {
     Menu menu;
     
     menu.loadingText();
-    Sleep(800);
+    Sleep(1000);
     
     system("cls");
     menu.authMenu();
-    
-    // Clean exit message
-    cout << "\n    Thank you for using ISTAD Inventory System!\n";
-    cout << "    Goodbye!\n\n";
     
     
     return 0;
