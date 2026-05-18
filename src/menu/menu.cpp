@@ -235,19 +235,33 @@ void Menu::authMenu() {
         }
     }
 
-    ProductManager manager;
+ProductManager manager;
     vector<Product> productList;
-    manager.loadFromExcel("products.xlsx", productList);
+    
+    try {
+        manager.loadFromExcel("products.xlsx", productList);
+    } catch (...) {
+        cout << YELLOW << "    ⚠ No products file found, starting fresh.\n" << RESET;
+    }
+
+    // DEBUG LINE - shows what role was captured
+    cout << "DEBUG role: [" << currentUser.getRole() << "]\n";
+    cout << "DEBUG username: [" << currentUser.getUsername() << "]\n";
+    
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer
 
     if (currentUser.getRole() == "admin") {
         adminMenu(manager);
-    } else {
+    } else if (currentUser.getRole() == "user") {
         userMenu(manager, currentUser);
+    } else {
+        cout << RED << "    ✗ ERROR: Role is empty or unknown: [" 
+             << currentUser.getRole() << "]\n" << RESET;
+        cin.get();
     }
 
     manager.writeProductToexcel("products.xlsx", productList);
 }
-
 // ================= ADMIN MENU =================
 void Menu::adminMenu(ProductManager& manager) {
     int option;
