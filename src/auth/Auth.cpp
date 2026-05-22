@@ -4,6 +4,7 @@
 #include "auth/User.hpp"
 #include "auth/Auth.hpp"
 #include <xlnt/xlnt.hpp>
+#include <auth/IncryptPass.hpp>
 
 using namespace std;
 using namespace xlnt;
@@ -68,9 +69,12 @@ void Auth::saveUser(const User& user) {
 void Auth::registerUser() {
     string username, password, cpass, role;
 
-    cout << "\033[33m★ Enter Username:          \033[0m"; cin >> username;
-    cout << "\033[33m★ Enter Password:          \033[0m"; cin >> password;
-    cout << "\033[33m★ Confirm Password:        \033[0m"; cin >> cpass;
+    cout << "\033[33m★ Enter Username:          \033[0m"; 
+    cin >> username;
+    cout << "\033[33m★ Enter Password:          \033[0m"; 
+    password = PasswordMask::getPassword();
+    cout << "\033[33m★ Confirm Password:        \033[0m"; 
+    cpass = PasswordMask::getPassword();
 
     if (password != cpass) {
         cout << "\033[31m❌ Passwords do not match!\n\033[0m";
@@ -102,7 +106,8 @@ bool Auth::login(User& currentUser) {
     string username, password;
 
     cout << "\033[33m★ Enter Username: \033[0m"; cin >> username;
-    cout << "\033[33m★ Enter Password: \033[0m"; cin >> password;
+    cout << "\033[33m★ Enter Password: \033[0m"; 
+    password = PasswordMask::getPassword();
 
     vector<User> users = loadUsers();
     for (auto& u : users) {

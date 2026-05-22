@@ -40,6 +40,7 @@ add_executable(ProductManagement
     src/menu/Menu.cpp
     src/products/Product.cpp
     src/products/ProductManager.cpp
+    src/auth/IncryptPass.cpp
 )
 
 # -------------------------

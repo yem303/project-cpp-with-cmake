@@ -19,7 +19,7 @@ void ProductManager::loadFromExcel(string filename, vector<Product> products) {
     wb.load(filename);
 
     auto ws = wb.active_sheet();
-    int rows = ws.highest_row(); // Returns the row of the last non-empty cell in the worksheet.
+    int rows = ws.highest_row(); 
 
     for (int i = 2; i <= rows; i++) {
         int id = ws.cell("A" + to_string(i)).value<int>();
@@ -133,21 +133,30 @@ void ProductManager::updateProduct() {
 }
 // Delete products
 void ProductManager::deleteProduct() {
-    int productId;
-    cout << "Enter product id to delete: ";
-    cin >> productId;  
 
-    auto it_if = find_if(productList.begin(), productList.end(),
+    int productId;
+
+    cout << "🗑️ Enter product id to delete: ";
+    cin >> productId;
+
+    auto it_if = find_if(productList.begin(),
+                         productList.end(),
+
         [&](Product &obj) {
             return obj.getId() == productId;
         });
 
     if (it_if != productList.end()) {
+
         productList.erase(it_if);
+
         writeProductToexcel("products.xlsx", productList);
-        cout << "✅ Deleted successfully!"<<endl;
+
+        cout << "✅ Deleted successfully!\n";
+
     } else {
-        cout << "❌ Delete is not successfully!"<<endl;;
+
+        cout << "❌ Product not found!\n";
     }
 }
 // Sort products order
@@ -159,4 +168,76 @@ void ProductManager::sortProducts() {
     showProducts();
     writeProductToexcel("products.xlsx", productList);
     cout << "✅ Sorted successfully\n";
+}
+// Stock in
+void ProductManager::stockIn(){
+    int id,quantity;
+    cout<<"Enter ID : ";
+    cin>>id;
+    cout<<"Enter qty : ";
+    cin>>quantity;
+
+    for(auto& product : productList){
+        if(product.getId() == id){
+            product.stockIn(quantity);
+            writeProductToexcel("products.xlsx", productList);
+            cout<<"✅ Stock in add successfully."<<endl;
+            return;
+        }
+        cout<<"❌ Stock in not found!"<<endl;
+    }
+}
+
+// Stock out
+void ProductManager::stockOut() {
+    int id, quantity;
+
+    cout << "Enter ID : ";
+    cin >> id;
+
+    cout << "Enter qty : ";
+    cin >> quantity;
+
+    for (auto& product : productList) {
+
+        if (product.getId() == id) {
+
+            if (product.stockOut(quantity)) {
+                writeProductToexcel("products.xlsx", productList);
+                cout << "Stock is out." <<endl;
+            } else {
+                cout << "Not enough stock." <<endl;
+            }
+
+            return;
+        }
+    }
+
+    cout << "❌ Stock not found!" <<endl;
+}
+
+void ProductManager::stockAlert() {
+
+
+    Product::displayHeader();
+
+ 
+    for (const auto& product : productList) {
+
+        string status;
+
+        if (product.getQty() <= 0) {
+
+            status = "❌ Out of Stock";
+
+        } else if (product.getQty() <= 10) {
+
+            status = "⚠️ Low Stock";
+
+        } else {
+
+            status = "✅ In Stock";
+        }
+        product.output(status);
+    }
 }

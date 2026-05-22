@@ -235,7 +235,7 @@ void Menu::authMenu() {
         }
     }
 
-ProductManager manager;
+    ProductManager manager;
     vector<Product> productList;
     
     try {
@@ -244,11 +244,11 @@ ProductManager manager;
         cout << YELLOW << "    ⚠ No products file found, starting fresh.\n" << RESET;
     }
 
-    // DEBUG LINE - shows what role was captured
+    
     cout << "DEBUG role: [" << currentUser.getRole() << "]\n";
     cout << "DEBUG username: [" << currentUser.getUsername() << "]\n";
     
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
 
     if (currentUser.getRole() == "admin") {
         adminMenu(manager);
@@ -273,21 +273,30 @@ void Menu::adminMenu(ProductManager& manager) {
         cout << "    ╠═══════════════════════════════════════════════════════════════╣\n";
         cout << "    ║                                                               ║\n";
         cout << "    ║  " << MAGENTA << "[1]  ➕  Add New Product" << CYAN << "                                     ║\n";
-        cout << "    ║       └─ Add new items to inventory                           ║\n";
+        cout << "    ║       └─ Add completely new products to inventory             ║\n";
         cout << "    ║                                                               ║\n";
-        cout << "    ║  " << MAGENTA << "[2]  🪟  View Product Inventory" << CYAN << "                               ║\n";
+        cout << "    ║  " << MAGENTA << "[2]  📦  Stock In" << CYAN << "                                            ║\n";
+        cout << "    ║       └─ Increase quantity of existing products               ║\n";
+        cout << "    ║                                                               ║\n";
+        cout << "    ║  " << MAGENTA << "[3]  📤  Stock Out" << CYAN << "                                           ║\n";
+        cout << "    ║       └─ Decrease quantity of existing products               ║\n";
+        cout << "    ║                                                               ║\n";
+        cout << "    ║  " << MAGENTA << "[4]  🪟  View Product Inventory" << CYAN << "                               ║\n";
         cout << "    ║       └─ Display all current products                         ║\n";
         cout << "    ║                                                               ║\n";
-        cout << "    ║  " << MAGENTA << "[3]  💻  Update Product Details" << CYAN << "                              ║\n";
+        cout << "    ║  " << MAGENTA << "[5]  ✏️  Update Product Details" << CYAN << "                               ║\n";
         cout << "    ║       └─ Modify existing product information                  ║\n";
         cout << "    ║                                                               ║\n";
-        cout << "    ║  " << MAGENTA << "[4]  ❌ Remove Product" << CYAN << "                                       ║\n";
+        cout << "    ║  " << MAGENTA << "[6]  🗑️  Remove Product" << CYAN << "                                       ║\n";
         cout << "    ║       └─ Delete items from inventory                          ║\n";
         cout << "    ║                                                               ║\n";
-        cout << "    ║  " << MAGENTA << "[5]  📊  Sort Product" << CYAN << "                                        ║\n";
-        cout << "    ║       └─ Sort order items from inventory                      ║\n";
+        cout << "    ║  " << MAGENTA << "[7]  📊  Sort Products" << CYAN << "                                       ║\n";
+        cout << "    ║       └─ Sort products by name, price, or quantity            ║\n";
         cout << "    ║                                                               ║\n";
-        cout << "    ║  " << MAGENTA << "[6]  🔄  Return to Main Menu" << CYAN << "                                 ║\n";
+        cout << "    ║  " << MAGENTA << "[8]  ⚠️  Stock Alert" << CYAN << "                                          ║\n";
+        cout << "    ║       └─ View low stock products and set thresholds           ║\n";
+        cout << "    ║                                                               ║\n";
+        cout << "    ║  " << MAGENTA << "[9]  🚪  Exit Program" << CYAN << "                                        ║\n";
         cout << "    ║       └─ Exit administrator panel                             ║\n";
         cout << "    ║                                                               ║\n";
         cout << "    ╚═══════════════════════════════════════════════════════════════╝\n";
@@ -295,7 +304,7 @@ void Menu::adminMenu(ProductManager& manager) {
 
         cout << GREEN;
         cout << "\n    ┌───────────────────────────────────────────────────────────────┐\n";
-        cout << "    │     Select an option to manage inventory (1-6)                │\n";
+        cout << "    │     Select an option to manage inventory (1-9)                │\n";
         cout << "    └───────────────────────────────────────────────────────────────┘\n";
         cout << RESET;
 
@@ -309,45 +318,70 @@ void Menu::adminMenu(ProductManager& manager) {
         }
 
         switch (option) {
-            case 1:{
-                cout << "\n";
-                manager.addProduct(); 
-                break;
-            }
-            case 2:{
-                cout << "\n";
-                manager.showProducts(); 
-                break;
-            }
-            case 3:{
-                cout << "\n";
-                manager.updateProduct(); 
-                break;
-            }
-            case 4: {
-                cout << "\n";
-                manager.deleteProduct(); 
-                break;
-            }
-            case 5:{
-                 cout << "\n";
-                 manager.sortProducts();
-                 break;
-            }
-            case 6: 
-                cout << GREEN << "\n    Returning to main menu...\n" << RESET;
-                break;
-            default: 
-                cout << RED << "    ✗ Invalid choice! Please select 1-5\n" << RESET;
-        }
-        
-        if (option != 6 && option >= 1 && option <= 4) {
-            cout << "\n    Press Enter to continue...";
-            cin.ignore();
-            cin.get();
+            case 1: {
+            cout << "\n";
+            manager.addProduct();
+            break;
         }
 
-    } while (option != 6);
+        case 2: {
+            manager.stockIn();
+            break;
+        }
+
+        case 3: {
+            manager.stockOut();
+            break;
+        }
+
+        case 4: {
+            cout << "\n";
+            manager.showProducts();
+            break;
+        }
+
+        case 5: {
+            cout << "\n";
+            manager.updateProduct();
+            break;
+        }
+
+        case 6: {
+            cout << "\n";
+            manager.deleteProduct();
+            break;
+        }
+
+        case 7: {
+            cout << "\n";
+            manager.sortProducts();
+            break;
+        }
+
+        case 8: {
+            manager.stockAlert();
+            break;
+        }
+
+        case 9:
+            cout << GREEN
+                << "\n    🔙 Returning to main menu...\n"
+                << RESET;
+            break;
+
+        default:
+            cout << RED
+                << "    ❌ Invalid choice! Please select 1-9\n"
+                << RESET;
+                
+                if (option != 6 && option >= 1 && option <= 4) {
+                    cout << "\n    Press Enter to continue...";
+                    cin.ignore();
+                    cin.get();
+                }
+        }
+
+    } while (option != 9);
 }
 
 // ================= USER MENU =================

@@ -46,7 +46,7 @@ void Product::input() {
 }
  // header
     void Product::displayHeader() {
-    cout<<string(100, '=')<<endl;;
+    cout<<string(125, '=')<<endl;;
     cout << left
          << setw(10) << "ID"
          << setw(20) << "Name"
@@ -54,13 +54,14 @@ void Product::input() {
          << setw(10) << "Price"
          << setw(10) << "Qty"
          << setw(20) << "Total Stock"
-         << setw(10) << "Total Amount"
+         << setw(20) << "Total Amount"
+         << setw(10) << "Stock Alert"
          << endl;
-        cout<<string(100, '=')<<endl;
+        cout<<string(125, '=')<<endl;
 }
 //  OUTPUT 
-void Product::output() const {
-    cout<<string(100, '-')<<endl;
+void Product::output() {
+    cout<<string(125, '-')<<endl;
     cout << left
          << setw(10) << id
          << setw(20) << name
@@ -70,7 +71,25 @@ void Product::output() const {
          << setw(20) << totalStock() 
          << setw(10) << totalAmount() <<fixed<<setprecision(2) << " $"
          << endl;
-         cout<<string(100, '-')<<endl;
+         cout<<string(125, '-')<<endl;
+}
+// Output with stock alert status
+void Product::output(string status) const {
+
+    cout << string(125, '-') << endl;
+
+    cout << left
+         << setw(10) << id
+         << setw(20) << name
+         << setw(20) << code
+         << setw(10) << price 
+         << setw(10) << qty
+         << setw(20) << totalStock()
+         << setw(20) << totalAmount() 
+         << setw(10) << status
+         << endl;
+
+    cout << string(125, '-') << endl;
 }
 // Setter 
 void Product::setId(int id){this->id = id;}
@@ -96,3 +115,24 @@ double Product::totalAmount() const {
     return price * qty;
 }
 
+// Stock in
+
+void Product::stockIn(int quantity){
+    qty += quantity;
+}
+// Stock out
+bool Product::stockOut(int quantity) {
+
+    if (quantity <= 0 || quantity > qty) {
+        return false;
+    }
+
+    qty -= quantity;
+
+    return true;
+}
+
+// stock alert
+bool Product::stockAlert(int threshold) {
+    return qty <= threshold;
+}

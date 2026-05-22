@@ -18,7 +18,12 @@ public:
             double price, int unit, int qty);
 
     void input();
-    void output() const;
+    void output();
+    void output(string status) const;
+    void stockIn(int quantity);
+    bool stockOut(int quantity);
+    bool stockAlert(int threshold);
+
     static void displayHeader();
 
     void setId(int id);
@@ -37,6 +42,7 @@ public:
 
     double totalStock() const;
     double totalAmount() const;
+ 
 };
 
 #endif

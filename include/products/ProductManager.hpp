@@ -18,6 +18,9 @@ public:
     void updateProduct();
     void deleteProduct();
     void sortProducts();
+    void stockIn();
+    void stockOut();
+    void stockAlert();
 };
 
 #endif
